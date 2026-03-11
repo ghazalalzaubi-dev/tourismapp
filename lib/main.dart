@@ -6,6 +6,7 @@ import 'quiz_screen.dart';
 import 'rating_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -51,25 +52,24 @@ class _MyAppState extends State<MyApp> {
           type: BottomNavigationBarType.fixed,
           onTap: (index) => changePage(index),
           items: const [
-            // التعديل هنا: وضعنا الإيموجي مكان الأيقونة التي تسبب المربع
             BottomNavigationBarItem(
-              icon: Text("🏠", style: TextStyle(fontSize: 24)), 
+              icon: Text("🏠", style: TextStyle(fontSize: 24)),
               label: "الرئيسية",
             ),
             BottomNavigationBarItem(
-              icon: Text("🎥", style: TextStyle(fontSize: 24)), 
+              icon: Text("🎥", style: TextStyle(fontSize: 24)),
               label: "الفيديو",
             ),
             BottomNavigationBarItem(
-              icon: Text("🗺️", style: TextStyle(fontSize: 24)), 
+              icon: Text("🗺️", style: TextStyle(fontSize: 24)),
               label: "المعالم",
             ),
             BottomNavigationBarItem(
-              icon: Text("❓", style: TextStyle(fontSize: 24)), 
+              icon: Text("❓", style: TextStyle(fontSize: 24)),
               label: "الاختبار",
             ),
             BottomNavigationBarItem(
-              icon: Text("⭐", style: TextStyle(fontSize: 24)), 
+              icon: Text("⭐", style: TextStyle(fontSize: 24)),
               label: "التقييم",
             ),
           ],

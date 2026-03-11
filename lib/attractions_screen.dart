@@ -1,33 +1,102 @@
 import 'package:flutter/material.dart';
 
-class AttractionsScreen extends StatelessWidget {
-  final VoidCallback onBack; // ← أضفنا callback للرجوع
+class Attraction {
+  final String name;
+  final String imgPath;
+  final String shortDesc;
+  final String fullDesc;
+
+  Attraction(
+    this.name,
+    this.imgPath,
+    this.shortDesc,
+    this.fullDesc,
+  );
+}
+
+class AttractionsScreen extends StatefulWidget {
+  final VoidCallback onBack;
 
   const AttractionsScreen({super.key, required this.onBack});
 
-  // كل بطاقة قابلة للنقر
-  Widget buildCard(BuildContext context, String name, String imgPath, String shortDesc, String fullDesc) {
+  @override
+  State<AttractionsScreen> createState() => _AttractionsScreenState();
+}
+
+class _AttractionsScreenState extends State<AttractionsScreen> {
+
+  late List<Attraction> attractions;
+
+  @override
+  void initState() {
+    super.initState();
+
+    attractions = [
+      Attraction(
+        "البتراء 🌹",
+        "assets/image/petra.jpg",
+        "المدينة الوردية وأحد عجائب الدنيا.",
+        "مدينة البتراء الوردية تعتبر من أشهر المواقع الأثرية في العالم وتقع في جنوب الأردن.",
+      ),
+      Attraction(
+        "جرش 🏛️",
+        "assets/image/jerash.jpg",
+        "مدينة الألف عمود الرومانية.",
+        "جرش من أفضل المدن الرومانية المحفوظة خارج إيطاليا وتشتهر بأعمدتها الضخمة.",
+      ),
+      Attraction(
+        "البحر الميت 🌊",
+        "assets/image/deadsea.jpeg",
+        "أخفض نقطة على سطح الأرض.",
+        "البحر الميت يتميز بملوحته العالية التي تسمح للناس بالطفو بسهولة.",
+      ),
+      Attraction(
+        "قلعة عجلون 🏰",
+        "assets/image/Ajloun.jpg",
+        "قلعة تاريخية في شمال الأردن.",
+        "بنيت قلعة عجلون في القرن الثاني عشر لحماية المنطقة من الغزوات.",
+      ),
+      Attraction(
+        "وادي رم 🏜️",
+        "assets/image/Wadi Rum.jpeg",
+        "صحراء خلابة تعرف بوادي القمر.",
+        "وادي رم يتميز بمناظره الصحراوية الجميلة ويعد من أهم المواقع السياحية في الأردن.",
+      ),
+    ];
+  }
+
+  Widget buildCard(BuildContext context, Attraction attr) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => DetailScreen(name: name, imgPath: imgPath, desc: fullDesc),
+            builder: (_) => DetailScreen(
+              name: attr.name,
+              imgPath: attr.imgPath,
+              desc: attr.fullDesc,
+            ),
           ),
         );
       },
-      child: Card(
-        elevation: 5,
-        shadowColor: Colors.teal.shade100,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Container(
         margin: const EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: const [
+            BoxShadow(color: Colors.black12, blurRadius: 5)
+          ],
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(15),
+              ),
               child: Image.asset(
-                imgPath,
+                attr.imgPath,
                 height: 200,
                 fit: BoxFit.cover,
               ),
@@ -38,18 +107,17 @@ class AttractionsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name,
+                    attr.name,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.teal),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.teal,
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    shortDesc,
+                    attr.shortDesc,
                     style: const TextStyle(fontSize: 16),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -70,65 +138,38 @@ class AttractionsScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: onBack, // ← زر الرجوع للصفحة الرئيسية
+          onPressed: widget.onBack,
         ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(15),
-        children: [
-          buildCard(
-            context,
-            "البتراء 🌹",
-            "assets/image/petra.jpg",
-            "المدينة الوردية وأحد عجائب الدنيا.",
-            "مدينة البتراء الوردية، إحدى عجائب الدنيا السبع، تقع في محافظة معان جنوب الأردن، وتعتبر موقعًا أثريًا مهمًا يعود إلى الحضارة النبطية. تحتوي على الخزنة والمقابر والمعابد المنحوتة في الصخور الوردية.",
-          ),
-          buildCard(
-            context,
-            "جرش 🏛️",
-            "assets/image/jerash.jpg",
-            "مدينة الألف عمود الرومانية.",
-            "جرش، مدينة الألف عمود، تعتبر من أفضل المدن الرومانية المحفوظة في العالم، وتحتوي على المعابد والساحات والمسرح الروماني الشهير. تقع شمال الأردن وتعتبر مقصدًا سياحيًا رائعًا لمحبي التاريخ.",
-          ),
-          buildCard(
-            context,
-            "البحر الميت 🌊",
-            "assets/image/deadsea.jpeg",
-            "أخفض نقطة على سطح الأرض.",
-            "البحر الميت، أخفض نقطة على سطح الأرض وأكثر البحار ملوحة في العالم. يشتهر بالطين المعدني وفوائده العلاجية، ويقع بين الأردن وفلسطين ويعتبر مقصدًا صحيًا وسياحيًا رائعًا.",
-          ),
-          buildCard(
-            context,
-            "قلعة عجلون 🏰",
-            "assets/image/Ajloun.jpg",
-            "قلعة تاريخية في شمال الأردن.",
-            "قلعة عجلون بنيت في القرن الثاني عشر لحماية المملكة من الغزاة الصليبيين، وتقع في شمال الأردن بين جبال عجلون. تعتبر من المعالم التاريخية المهمة وتوفر إطلالات رائعة على المنطقة المحيطة.",
-          ),
-          buildCard(
-            context,
-            "وادي رم 🏜️",
-            "assets/image/Wadi Rum.jpeg",
-            "صحراء خلابة تعرف بوادي القمر.",
-            "وادي رم، المعروف باسم وادي القمر، صحراء خلابة تشتهر بتكويناتها الصخرية المدهشة، مناظرها الطبيعية الفريدة، ورحلات السفاري الصحراوية. تقع جنوب الأردن وتعد من أبرز مناطق السياحة الطبيعية في المملكة.",
-          ),
-        ],
+        children: attractions
+            .map((attr) => buildCard(context, attr))
+            .toList(),
       ),
     );
   }
 }
 
-// صفحة التفاصيل لكل معلم
 class DetailScreen extends StatelessWidget {
   final String name;
   final String imgPath;
   final String desc;
 
-  const DetailScreen({super.key, required this.name, required this.imgPath, required this.desc});
+  const DetailScreen({
+    super.key,
+    required this.name,
+    required this.imgPath,
+    required this.desc,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(name), backgroundColor: Colors.teal),
+      appBar: AppBar(
+        title: Text(name),
+        backgroundColor: Colors.teal,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
